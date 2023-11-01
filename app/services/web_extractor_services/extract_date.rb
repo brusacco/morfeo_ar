@@ -70,7 +70,7 @@ module WebExtractorServices
         @date = @doc.at('.conteindo__texto p:nth-child(1)').text
         @parsed = false
       elsif @doc.at('.fecha-autor') && @date.nil?
-        @date = @doc.at('.fecha-autor').text.split('|').first
+        @date = @doc.at('.fecha-autor').text.gsub('hs', '')
         @parsed = false
       elsif @doc.at('.contenedor_fecha_noticia') && @date.nil?
         @date = @doc.at('.contenedor_fecha_noticia').text
