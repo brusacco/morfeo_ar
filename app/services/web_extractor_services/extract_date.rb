@@ -69,8 +69,8 @@ module WebExtractorServices
       elsif @doc.at('.conteindo__texto p:nth-child(1)') && @date.nil?
         @date = @doc.at('.conteindo__texto p:nth-child(1)').text
         @parsed = false
-      elsif @doc.at('.fecha') && @date.nil?
-        @date = @doc.at('.fecha').text
+      elsif @doc.at('.span.fecha') && @date.nil?
+        @date = @doc.at('.span.fecha').text
         @parsed = false
       elsif @doc.at('.contenedor_fecha_noticia') && @date.nil?
         @date = @doc.at('.contenedor_fecha_noticia').text
