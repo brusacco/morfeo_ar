@@ -29,6 +29,7 @@ module WebExtractorServices
         @parsed = false
       elsif @doc.at_css('time') && @date.nil?
         @date = @doc.at_css('time')[:datetime]
+        @date = @doc.at_css('time')[:datatime] if @date.nil?
         @parsed = true
       elsif @doc.at_css('#fusion-app > div > section.sec-m.container > div > article > header > div.bl > div.dt') && @date.nil?
         @date = @doc.at_css('#fusion-app > div > section.sec-m.container > div > article > header > div.bl > div.dt').text
