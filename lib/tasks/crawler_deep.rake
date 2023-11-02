@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 desc 'Moopio Morfeo web crawler'
-task crawler_deep: :environment do
+task crawler: :environment do
   directories = %w[
     blackhole
     wp-login
@@ -29,6 +29,7 @@ task crawler_deep: :environment do
     puts '--------------------------------------------------------------------"'
     Anemone.crawl(
       site.url,
+      read_timeout: 10,
       depth_limit: 3,
       discard_page_bodies: true,
       accept_cookies: true,
@@ -39,7 +40,6 @@ task crawler_deep: :environment do
       anemone.skip_links_like(/.*\.(jpeg|jpg|gif|png|pdf|mp3|mp4|mpeg)/, directory_pattern)
 
       anemone.focus_crawl do |page|
-        # page.links.delete_if { |href| Entry.exists?(url: href.to_s) }
         page.links.delete_if do |href|
           href.to_s.match(/#{site.negative_filter.presence || 'NUNCA'}/).present?
         end
