@@ -82,7 +82,7 @@
       </div>
     </div>
     <br>
-    <%if @comments_word_occurrences.any && @tag.belongs_to_any_topic?%>
+    <%if @comments_word_occurrences && @tag.belongs_to_any_topic?%>
       <div class="overflow-hidden bg-white shadow sm:rounded-lg">
         <h2 class="text-2xl mx-5 my-5 font-bold tracking-tight text-gray-900">Nube de palabras de comentarios</h2>
         <div class="mt-20 mb-20 px-30 py-10 sm:p-6">
