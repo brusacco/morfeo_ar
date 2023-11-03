@@ -37,7 +37,7 @@ task site_crawler: :environment do
     Anemone.crawl(
       site.url,
       read_timeout: 10,
-      depth_limit: 2,
+      depth_limit: 3,
       discard_page_bodies: true,
       accept_cookies: true,
       threads: 5,
@@ -47,7 +47,6 @@ task site_crawler: :environment do
       anemone.skip_links_like(/.*\.(jpeg|jpg|gif|png|pdf|mp3|mp4|mpeg)/, directory_pattern)
 
       anemone.focus_crawl do |page|
-        page.links.delete_if { |href| Entry.exists?(url: href.to_s) }
         page.links.delete_if do |href|
           href.to_s.match(/#{site.negative_filter.presence || 'NUNCA'}/).present?
         end
