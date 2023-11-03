@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 desc 'Moopio Morfeo web crawler'
-task site: :environment do
+task site_crawler: :environment do
   site_id = ENV.fetch('site_id')
 
   if site_id.blank?
