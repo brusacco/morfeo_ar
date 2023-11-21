@@ -15,16 +15,16 @@
             <div class="flex items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 p-6">
               <div class="text font-medium leading-6 text-gray-900"><%=topic.name%></div>
               <div class="relative ml-auto">
-                <div class="text-sm font-medium leading-6 text-gray-900">Ver reporte</div>
+                <%=link_to 'Ver Tópico', topic_path(topic), class: 'text-sm font-medium leading-6 text-gray-900'%>
               </div>
             </div>
             <dl class="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
               <div class="flex justify-between gap-x-4 py-3">
-                <dt class="text-gray-500">Last invoice</dt>
+                <dt class="text-gray-500">Cantidad Notas</dt>
                 <dd class="text-gray-700"><%=topic.topic_entries.count('*')%></dd>
               </div>
               <div class="flex justify-between gap-x-4 py-3">
-                <dt class="text-gray-500">Amount</dt>
+                <dt class="text-gray-500">Cantidad Interacciones</dt>
                 <dd class="flex items-start gap-x-2">
                   <div class="font-medium text-gray-900"><%=topic.topic_entries.sum(:total_count)%></div>
                 </dd>
