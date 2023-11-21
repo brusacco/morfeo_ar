@@ -9,6 +9,8 @@ class HomeController < ApplicationController
     @entries = Entry.includes(:site).order(published_at: :desc).limit(100)
     @tags = @entries.tag_counts_on(:tags).order('count desc')
 
+    @topcis = current_user.topics
+
     @tags = @tags.select { |tag| tag.count > 1 }
 
     @tags_interactions = {}

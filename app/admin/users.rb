@@ -20,10 +20,10 @@ ActiveAdmin.register User do
         f.inputs "Actualizar datos de Usuario", :multipart => true do
           f.input :name, label: 'Nombre'
           f.input :email, label: 'Email'
-          if f.object.new_record?
+          #if f.object.new_record?
             f.input :password, label: 'Contreseña'
             f.input :password_confirmation, label: 'Confirmar contreseña'
-          end
+          #end
         end
       end
       column do
@@ -42,7 +42,7 @@ ActiveAdmin.register User do
     id_column
     column 'Nombre', sortable: :name do |c|
       link_to c.name, admin_user_path(c)
-    end    
+    end
     column :email
 
     column "Tópico(s) asignado(s)" do |user|
@@ -52,5 +52,5 @@ ActiveAdmin.register User do
     column 'Fecha de Creación', :created_at
     column 'Fecha de Actualización', :updated_at
     actions
-  end  
+  end
 end
