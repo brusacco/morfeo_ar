@@ -82,6 +82,9 @@ module WebExtractorServices
       elsif @doc.at('.media-body .mg-blog-date') && @date.nil?
         @date = @doc.at('.media-body .mg-blog-date').text
         @parsed = false
+      elsif @doc.at('body > div.container > div.row > div.col-md-9 > div:nth-child(1) > div.entry-meta > a:nth-child(2)') && @date.nil?
+        @date = @doc.at('body > div.container > div.row > div.col-md-9 > div:nth-child(1) > div.entry-meta > a:nth-child(2)').text
+        @parsed = false
       else
         @date = nil
       end
