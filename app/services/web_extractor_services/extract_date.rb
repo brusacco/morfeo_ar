@@ -79,6 +79,9 @@ module WebExtractorServices
       elsif @doc.at('.in-blog-metatop') && @date.nil?
         @date = @doc.at('div.in-blog-metatop > span:nth-child(1)').text
         @parsed = false
+      elsif @doc.at('.media-body .mg-blog-date') && @date.nil?
+        @date = @doc.at('.media-body .mg-blog-date').text
+        @parsed = false
       else
         @date = nil
       end
