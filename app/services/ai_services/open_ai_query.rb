@@ -15,6 +15,7 @@ module AiServices
           temperature: 0.7
         }
       )
+      byebug
       result = response.dig('choices', 0, 'message', 'content')
       handle_success(result)
     end
