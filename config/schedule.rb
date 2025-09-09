@@ -2,14 +2,14 @@
 
 set :environment, 'production'
 
-every :hour do
+every 2.hours do
   rake 'crawler'
   rake 'update_stats'
   rake 'update_site_stats'
   rake 'ai:set_topic_polarity'
 end
 
-every 3.hours do
+every 4.hours do
   rake 'crawler_deep'
 end
 
