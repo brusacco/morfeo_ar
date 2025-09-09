@@ -11,18 +11,12 @@
         <!-- Gráfico 1 -->
         <div class="w-full sm:w-1/2 overflow-hidden bg-white shadow sm:rounded-lg mb-0 sm:mb-0">
           <h2 class="text-xl mx-5 my-5 font-bold tracking-tight text-gray-900">Notas x DIA</h2>
-          <div class='outside'>
-            <%= column_chart @entries.count('*'), xtitle: "Fecha", ytitle: "Cant. Notas", label: "Cant. Notas", thousands: ".", curve: false, 
-                  adapter: 'highcharts', id: 'entryQuantitiesChart', colors: ['blue'] %>
-          </div>
+          <%= column_chart @entries.group_by_day(:published_at).count('*'), xtitle: "Fecha", ytitle: "Cant. Notas", label: "Notas", colors: ['blue'] %>
         </div>
         <!-- Gráfico 2 -->
         <div class="w-full sm:w-1/2 overflow-hidden bg-white shadow sm:rounded-lg mb-0 sm:mb-0">
           <h2 class="text-xl mx-5 my-5 font-bold tracking-tight text-gray-900">Interacciones x DIA</h2>
-          <div class='outside'>
-            <%= column_chart @entries.sum(:total_count), xtitle: "Fecha", ytitle: "Interacciones", label: "Interacciones", thousands: ".", curve: false, 
-                  adapter: 'highcharts', id: 'entryInteractionsChart', colors: ['green']  %>
-          </div>
+          <%= column_chart @entries.group_by_day(:published_at).sum(:total_count), xtitle: "Fecha", ytitle: "Interacciones", label: "Interacciones", colors: ['green']%>
         </div>
       </div>
     </div>
