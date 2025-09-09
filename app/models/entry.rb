@@ -13,7 +13,7 @@ class Entry < ApplicationRecord
   scope :has_interactions, -> { where(total_count: 10..) }
   scope :has_any_interactions, -> { where(total_count: 1..) }
 
-  enum polarity: { neutral: 0, positive: 1, negative: 2 }
+  enum :polarity, { neutral: 0, positive: 1, negative: 2 }
 
   before_save :set_published_date
 
@@ -99,7 +99,7 @@ class Entry < ApplicationRecord
   end
 
   def set_polarity(force: false)
-    return polarity unless polarity.nil?
+    # return polarity unless polarity.nil?
 
     sleep 5
 
@@ -110,9 +110,9 @@ class Entry < ApplicationRecord
     En caso de no poder analizar responder neutra."
 
     ai_polarity = call_ai(text)
-    if ai_polarity == 'negativa' || ai_polarity == 'Negativa'
+    if %w[negativa Negativa].include?(ai_polarity)
       update!(polarity: :negative)
-    elsif ai_polarity == 'positiva' || ai_polarity == 'Positiva'
+    elsif %w[positiva Positiva].include?(ai_polarity)
       update!(polarity: :positive)
     else
       update!(polarity: :neutral)
