@@ -2,7 +2,8 @@
 
 desc 'Update stats'
 task update_stats: :environment do
-  Parallel.each(Entry.where(published_at: 5.days.ago..Time.current), in_threads: 2) do |entry|
+  entries = Entry.where(published_at: 5.days.ago..Time.current).order(published_at: :desc)
+  Parallel.each(entries, in_threads: 2) do |entry|
     result = FacebookServices::UpdateStats.call(entry.id)
     puts result
     if result.success?
