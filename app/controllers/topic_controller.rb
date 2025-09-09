@@ -61,11 +61,21 @@ class TopicController < ApplicationController
 
     @tags = @entries.tag_counts_on(:tags).order('count desc').limit(20)
 
-    @tags_interactions = Entry.joins(:tags)
-                              .where(id: @entries.select(:id), tags: { id: @tags.map(&:id) })
-                              .group('tags.name')
-                              .sum(:total_count)
-                              .sort_by { |_k, v| -v }
+    @tags_interactions = {}
+    @tags.each do |tag|
+      @entries.each do |entry|
+        next unless entry.tag_list.include?(tag.name)
+
+        tag.interactions ||= 0
+        tag.interactions += entry.total_count
+
+        @tags_interactions[tag.name] ||= 0
+        @tags_interactions[tag.name] += entry.total_count
+      end
+    end
+
+    @tags_interactions = @tags_interactions.sort_by { |_k, v| v }
+                                           .reverse
 
     @tags_count = {}
     @tags.each { |n| @tags_count[n.name] = n.count }
