@@ -29,7 +29,7 @@
           </dl>
         </div>
       </div>
-       <div class="mx-auto px-4 py-8 sm:px-6 sm:py-8 lg:px-8">
+      <div class="mx-auto px-4 py-8 sm:px-6 sm:py-8 lg:px-8">
         <div class="flex">
           <div class="w-1/2 overflow-hidden bg-white shadow sm:rounded-lg">
             <h2 class="text-2xl mx-5 my-5 font-bold tracking-tight text-gray-900">Cantidad de Notas por Sentimiento</h2>
@@ -41,7 +41,6 @@
           </div>
         </div>
       </div>
-
       <div class="mx-auto px-4 py-8 sm:px-6 sm:py-8 lg:px-8">
         <div class="flex">
           <div class="w-1/2">
@@ -60,7 +59,6 @@
           </div>
         </div>
       </div>
-
     <%end%>
     <div class="m-2">
       <p>La etiqueta <b><%=@tag.name%></b> en los ultimos <b><%=DAYS_RANGE%> días</b> cuenta con un total de <b><%=number_with_delimiter(@total_entries, delimiter: ".")%></b> notas y genero un total de <b><%=number_with_delimiter(@total_interactions, delimiter: '.')%></b> interacciones, lo que nos da un promedio de <b><%=number_with_delimiter(@promedio, delimiter: '.')%></b> interacciones por nota.</p>
@@ -95,7 +93,7 @@
     <hr>
     <%= render partial: 'entry/entries', locals: { last_entries: @most_interactions, title: 'Top Interacciones de la Etiqueta' } %>
     <hr>
-    <%= render partial: 'site/sites', locals: { sites: @entries.group("sites.name").count('*').sort_by { |site, count| -count }.take(10), title: 'Los medios que mas han mencionado' } %>
+    <%= render partial: 'site/sites', locals: { sites: @entries.group("sites.id").count('*').sort_by { |site, count| -count }.take(10), title: 'Los medios que mas han mencionado' } %>
     <div class="mx-auto px-4 py-8 sm:px-6 sm:py-8  lg:px-8">
       <h2 class="text-2xl font-bold tracking-tight text-gray-900">Análisis de los últimos <%=DAYS_RANGE%> días</h2>
       <%= column_chart @entries.group_by_day(:published_at).count, xtitle: "Fecha", ytitle: "Cant. Notas", label: "Notas", colors: ['blue'] %>
