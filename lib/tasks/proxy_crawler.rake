@@ -2,7 +2,7 @@
 
 desc 'Moopio Morfeo proxy web crawler'
 task proxy_crawler: :environment do
-  Site.where(id: [28]).find_each do |site|
+  Site.where(id: [26, 28]).find_each do |site|
     puts "Start processing site #{site.name}..."
     puts '--------------------------------------------------------------------'
 
