@@ -6,7 +6,7 @@ namespace :ai do
     Topic.all.find_each do |topic|
       puts topic.name
       puts '--------------------------------'
-      Parallel.each(topic.topic_entries.where(polarity: [nil, 0]), in_threads: 5) do |entry|
+      Parallel.each(topic.topic_entries.where(polarity: nil), in_threads: 5) do |entry|
         entry.set_polarity
         puts entry.id
         puts entry.title
