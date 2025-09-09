@@ -7,6 +7,34 @@
   <div class="mx-auto py-8 sm:px-6 lg:px-8">
     <%= render partial: "tag/tag_entry", collection: @topic.tags %>
     <div class="mx-auto px-4 py-8 sm:px-6 sm:py-8 lg:px-8">
+      <div class="chart-container">
+        <!-- Gráfico 1 -->
+        <div class="w-full sm:w-1/2 overflow-hidden bg-white shadow sm:rounded-lg mb-0 sm:mb-0">
+          <h2 class="text-xl mx-5 my-5 font-bold tracking-tight text-gray-900">Notas x DIA</h2>
+          <div class='outside'
+            data-controller='topics'
+            data-topics-id-value='entryQuantitiesChart'
+            data-topics-url-value='<%= entries_data_topics_path %>'
+            data-topics-topic-id-value='<%= @topic.id %>'>
+            <%= column_chart @chart_entries.count('*'), xtitle: "Fecha", ytitle: "Cant. Notas", label: "Cant. Notas", thousands: ".", curve: false, 
+                  adapter: 'highcharts', id: 'entryQuantitiesChart', colors: ['blue'] %>
+          </div>
+        </div>
+        <!-- Gráfico 2 -->
+        <div class="w-full sm:w-1/2 overflow-hidden bg-white shadow sm:rounded-lg mb-0 sm:mb-0">
+          <h2 class="text-xl mx-5 my-5 font-bold tracking-tight text-gray-900">Interacciones x DIA</h2>
+          <div class='outside'
+            data-controller='topics'
+            data-topics-id-value='entryInteractionsChart'
+            data-topics-url-value='<%= entries_data_topics_path %>'
+            data-topics-topic-id-value='<%= @topic.id %>'>
+            <%= column_chart @chart_entries.sum(:total_count), xtitle: "Fecha", ytitle: "Interacciones", label: "Interacciones", thousands: ".", curve: false, 
+                  adapter: 'highcharts', id: 'entryInteractionsChart', colors: ['green']  %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mx-auto px-4 py-8 sm:px-6 sm:py-8 lg:px-8">
       <div>
         <h2 class="text-2xl mx-5 my-5 font-bold tracking-tight text-gray-900">Análisis de sentimiento</h2>
         <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-4">
