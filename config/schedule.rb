@@ -11,6 +11,7 @@ end
 
 every 4.hours do
   rake 'crawler_deep'
+  rake 'proxy_crawler'
 end
 
 every 6.hours do
