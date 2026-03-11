@@ -7,7 +7,7 @@ module FacebookServices
     end
 
     def call
-      api_url = 'https://graph.facebook.com/v8.0/'
+      api_url = 'https://graph.facebook.com/v22.0/'
       token = '1442100149368278|KS0hVFPE6HgqQ2eMYG_kBpfwjyo'
       request = "#{api_url}/#{@uid}?fields=cover%2Cusername%2Cpicture%2Cname%2Cfan_count%2Ccategory%2Cdescription%2Cid%2Cwebsite&access_token=#{token}"
       response = HTTParty.get(request)

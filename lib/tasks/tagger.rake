@@ -2,7 +2,7 @@
 
 desc 'Tagger'
 task tagger: :environment do
-  Entry.where(published_at: 3.months.ago..Time.current).each do |entry|
+  Entry.where(published_at: 2.weeks.ago..Time.current).each do |entry|
     result = WebExtractorServices::ExtractTags.call(entry.id)
     next unless result.success?
 
@@ -16,7 +16,7 @@ task tagger: :environment do
   rescue StandardError => e
     puts e.message
     sleep 1
-    retry
+    next
   end
 end
 

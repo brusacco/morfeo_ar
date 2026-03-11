@@ -4,7 +4,8 @@ set :environment, 'production'
 
 every 2.hours do
   rake 'crawler'
-  rake 'update_stats'
+  #rake 'update_stats'
+  rake 'update_api'
   rake 'update_site_stats'
   rake 'ai:set_topic_polarity'
 end
@@ -16,4 +17,5 @@ end
 
 every 6.hours do
   rake 'ai:generate_ai_reports'
+  rake 'facebook:update_fanpages'
 end
