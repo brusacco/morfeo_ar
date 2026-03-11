@@ -57,7 +57,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_13_144237) do
     t.integer "site_id"
     t.text "description"
     t.text "content"
-    t.datetime "published_at", precision: nil
+    t.datetime "published_at"
     t.text "image_url"
     t.integer "reaction_count", default: 0
     t.integer "comment_count", default: 0
@@ -147,7 +147,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_13_144237) do
     t.datetime "updated_at", null: false
     t.integer "taggings_count", default: 0
     t.string "variations"
-    t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
   create_table "tags_topics", id: false, force: :cascade do |t|

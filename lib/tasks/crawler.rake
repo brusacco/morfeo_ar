@@ -25,7 +25,7 @@ task crawler: :environment do
   ]
   directory_pattern = /#{directories.join('|')}/
   Site.all.order(total_count: :desc).each do |site|
-    puts "Start test processing site #{site.name}..."
+    puts "Start processing site #{site.name}..."
     puts '--------------------------------------------------------------------"'
     Anemone.crawl(
       site.url,
@@ -47,7 +47,7 @@ task crawler: :environment do
       end
 
       anemone.on_pages_like(/#{site.filter}/) do |page|
-        Entry.create_with(site: site).find_or_create_by!(url: page.url.to_s) do |entry|
+        Entry.create_with(site:).find_or_create_by!(url: page.url.to_s) do |entry|
           puts entry.url
 
           #---------------------------------------------------------------------------
@@ -94,17 +94,6 @@ task crawler: :environment do
             puts result.data
           else
             puts "ERROR TAGGER: #{result&.error}"
-          end
-
-          #---------------------------------------------------------------------------
-          # Stats extractor
-          #---------------------------------------------------------------------------
-          result = FacebookServices::UpdateStats.call(entry.id)
-          if result.success?
-            entry.update!(result.data)
-            puts result.data
-          else
-            puts "ERROR STATS: #{result&.error}"
           end
 
           #---------------------------------------------------------------------------
