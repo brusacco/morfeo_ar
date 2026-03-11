@@ -13,5 +13,9 @@ task update_dates: :environment do
     end
   rescue StandardError => e
     puts "#{entry.url}: #{e}"
+    if e.message.include?('404')
+      entry.destroy!
+      puts "Entry #{entry.url} deleted due to 404 error."
+    end
   end
 end
