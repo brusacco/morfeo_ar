@@ -16,6 +16,7 @@ end
 
 every 6.hours do
   rake 'crawler_deep'
+  rake 'tagger'
   rake 'ai:generate_ai_reports'
   rake 'facebook:update_fanpages'
 end
