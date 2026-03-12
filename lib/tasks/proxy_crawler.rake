@@ -27,7 +27,7 @@ task proxy_crawler: :environment do
         content = proxy_request(link).body
         doc = Nokogiri::HTML(content)
 
-        Entry.create_with(site: site).find_or_create_by!(url: link) do |entry|
+        Entry.create_with(site:).find_or_create_by!(url: link) do |entry|
           puts entry.url
 
           #---------------------------------------------------------------------------
@@ -75,17 +75,6 @@ task proxy_crawler: :environment do
           else
             puts "ERROR TAGGER: #{result&.error}"
           end
-
-          #---------------------------------------------------------------------------
-          # Stats extractor
-          #---------------------------------------------------------------------------
-          # result = FacebookServices::UpdateStats.call(entry.id)
-          # if result.success?
-          #   entry.update!(result.data)
-          #   puts result.data
-          # else
-          #   puts "ERROR STATS: #{result&.error}"
-          # end
 
           #---------------------------------------------------------------------------
           # Set entry polarity

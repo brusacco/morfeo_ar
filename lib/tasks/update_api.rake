@@ -36,7 +36,7 @@ task update_api: :environment do
         end
 
         # Break if no data returned
-        break if data['data'].nil? || data['data'].empty?
+        break if data['data'].blank?
 
         data['data'].each do |post|
           next unless post['attachments'] &&
@@ -97,7 +97,7 @@ task update_api: :environment do
       end
 
       # Print all clean URLs at the end
-      puts "\n" + ('=' * 50)
+      puts "\n#{'=' * 50}"
       puts 'CLEAN URLs EXTRACTED WITH ENGAGEMENT:'
       puts '=' * 50
       posts.each do |_url, post_data|
