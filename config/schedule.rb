@@ -11,11 +11,11 @@ every 2.hours do
 end
 
 every 4.hours do
-  rake 'crawler_deep'
   rake 'proxy_crawler'
 end
 
 every 6.hours do
+  rake 'crawler_deep'
   rake 'ai:generate_ai_reports'
   rake 'facebook:update_fanpages'
 end
