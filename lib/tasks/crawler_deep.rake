@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 desc 'Moopio Morfeo web crawler'
-task crawler: :environment do
+task crawler_deep: :environment do
   directories = %w[
     blackhole
     wp-login
@@ -46,7 +46,7 @@ task crawler: :environment do
       end
 
       anemone.on_pages_like(/#{site.filter}/) do |page|
-        Entry.create_with(site: site).find_or_create_by!(url: page.url.to_s) do |entry|
+        Entry.create_with(site:).find_or_create_by!(url: page.url.to_s) do |entry|
           puts entry.url
 
           #---------------------------------------------------------------------------
