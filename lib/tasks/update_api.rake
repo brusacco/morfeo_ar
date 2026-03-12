@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'json'
-require 'pp'
 require 'cgi'
 
 desc 'Actualiza la info de los sitios'
@@ -29,6 +28,12 @@ task update_api: :environment do
       while page_number <= max_pages
         puts "Fetching page #{page_number}/#{max_pages}..."
         data = call_api(site.uid, cursor)
+
+        # Abort if the API returned an error
+        if data['error']
+          puts "  ❌ API error: #{data['error']['message']} (type: #{data['error']['type']})"
+          break
+        end
 
         # Break if no data returned
         break if data['data'].nil? || data['data'].empty?
@@ -58,7 +63,7 @@ task update_api: :environment do
 
           post_data = {
             url: target_url,
-            total_engagement: total_engagement,
+            total_engagement:,
             details: get_engagement_breakdown(post),
             post_id: post['id']
           }
@@ -99,19 +104,22 @@ task update_api: :environment do
         puts "Post ID: #{post_data[:post_id]}"
 
         # Check if URL exists in database
-        entry = Entry.find_by_url_and_site_id(post_data[:url], site.id)
-        delta_change = 0 # Initialize delta_change for all posts
+        entry = Entry.find_by(url: post_data[:url], site_id: site.id)
 
         if entry
           puts "Clean URL: #{post_data[:url]}"
+          delta_change = post_data[:total_engagement] - (entry.total_count || 0)
 
-          entry.reaction_count = post_data[:details][:reactions][:total]
-          entry.comment_count = post_data[:details][:comments]
-          entry.share_count = post_data[:details][:shares]
-          entry.total_count = post_data[:total_engagement]
-          entry.save!
+          ActiveRecord::Base.transaction do
+            entry.reaction_count = post_data[:details][:reactions][:total]
+            entry.comment_count = post_data[:details][:comments]
+            entry.share_count = post_data[:details][:shares]
+            entry.total_count = post_data[:total_engagement]
+            entry.save!
+          end
           puts "  → Stats updated: R:#{entry.reaction_count} C:#{entry.comment_count} S:#{entry.share_count} T:#{entry.total_count}"
         else
+          delta_change = 0
           puts "Clean URL: #{post_data[:url]}"
         end
 
@@ -121,6 +129,9 @@ task update_api: :environment do
       end
       puts "Total posts processed: #{posts.count}"
       puts '=' * 50
+    rescue ActiveRecord::RecordInvalid => e
+      puts "  ❌ Failed to save entry: #{e.message}"
+      puts '  ⏭️  Skipping to next site...'
     rescue Net::OpenTimeout, Net::ReadTimeout, Errno::ECONNRESET, SocketError => e
       site_retry_count += 1
       if site_retry_count <= site_max_retries
@@ -133,6 +144,8 @@ task update_api: :environment do
         puts '  ⏭️  Skipping to next site...'
       end
     end
+
+    sleep(1) # Avoid hitting Facebook rate limits between pages
   end
 end
 
@@ -179,10 +192,8 @@ def clean_facebook_url(facebook_url)
   match = facebook_url.match(/u=([^&]+)/)
   return if match.nil?
 
-  # Decode the URL
+  # Decode and return the extracted URL
   CGI.unescape(match[1])
-
-  # If it's not a redirect URL, return as is
 end
 
 def calculate_total_engagement(post)
