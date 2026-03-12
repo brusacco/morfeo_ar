@@ -62,7 +62,7 @@ module WebExtractorServices
         @date = @doc.at('.noticia_fecha').text
         @parsed = false
       elsif @doc.at('.flex .items-center') && @date.nil?
-        @date = @doc.at('.flex .items-center')[0].text
+        @date = @doc.at('.flex .items-center').text
         @parsed = false
       elsif @doc.at('.title-post li:nth-child(1)') && @date.nil?
         @date = @doc.at('.title-post li:nth-child(1)').text
