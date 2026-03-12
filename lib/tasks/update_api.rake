@@ -3,20 +3,20 @@
 require 'json'
 require 'cgi'
 
-desc 'Actualiza la info de los sitios'
+desc 'Actualiza la info de los páginass de Facebook y sus entradas'
 task update_api: :environment do
-  # Reset all delta values for entries from this site
+  # Reset all delta values for entries from this page
   puts 'Resetting delta values for all entries'
   pages = Page.where("uid <> ''")
 
-  pages.each do |site|
+  pages.each do |page|
     puts '-' * 30
-    puts "Processing site: #{site.name} (UID: #{site.uid})"
+    puts "Processing page: #{page.name} (UID: #{page.uid})"
     puts '-' * 30
 
-    # Retry logic for entire site processing
-    site_max_retries = 2
-    site_retry_count = 0
+    # Retry logic for entire page processing
+    page_max_retries = 2
+    page_retry_count = 0
 
     begin
       posts = {}
@@ -27,7 +27,7 @@ task update_api: :environment do
       # Loop through pages using pagination (limited to 3 pages)
       while page_number <= max_pages
         puts "Fetching page #{page_number}/#{max_pages}..."
-        data = call_api(site.uid, cursor)
+        data = call_api(page.uid, cursor)
 
         # Abort if the API returned an error
         if data['error']
@@ -104,7 +104,7 @@ task update_api: :environment do
         puts "Post ID: #{post_data[:post_id]}"
 
         # Check if URL exists in database
-        entry = Entry.find_by(url: post_data[:url], site_id: site.id)
+        entry = Entry.find_by(url: post_data[:url], site_id: page.site.id)
 
         if entry
           puts "Clean URL: #{post_data[:url]}"
@@ -131,17 +131,17 @@ task update_api: :environment do
       puts '=' * 50
     rescue ActiveRecord::RecordInvalid => e
       puts "  ❌ Failed to save entry: #{e.message}"
-      puts '  ⏭️  Skipping to next site...'
+      puts '  ⏭️  Skipping to next page...'
     rescue Net::OpenTimeout, Net::ReadTimeout, Errno::ECONNRESET, SocketError => e
-      site_retry_count += 1
-      if site_retry_count <= site_max_retries
-        puts "  ⚠️  Site processing failed (attempt #{site_retry_count}/#{site_max_retries}): #{e.class.name}"
-        puts "  🔄 Retrying entire site in #{site_retry_count * 5} seconds..."
-        sleep(site_retry_count * 5) # Progressive delay: 5s, 10s
+      page_retry_count += 1
+      if page_retry_count <= page_max_retries
+        puts "  ⚠️  Page processing failed (attempt #{page_retry_count}/#{page_max_retries}): #{e.class.name}"
+        puts "  🔄 Retrying entire page in #{page_retry_count * 5} seconds..."
+        sleep(page_retry_count * 5) # Progressive delay: 5s, 10s
         retry
       else
-        puts "  ❌ Site processing failed after #{site_max_retries} retries: #{e.class.name}"
-        puts '  ⏭️  Skipping to next site...'
+        puts "  ❌ Page processing failed after #{page_max_retries} retries: #{e.class.name}"
+        puts '  ⏭️  Skipping to next page...'
       end
     end
 
