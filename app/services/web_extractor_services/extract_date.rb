@@ -110,8 +110,11 @@ module WebExtractorServices
     # Parse ld+json data
     #------------------------------------------------------------------------------------
     def date_from_ld(json_ld)
-      data = JSON.parse(json_ld)
+      sanitized = json_ld.gsub(/[\x00-\x08\x0A-\x1F]/, ' ')
+      data = JSON.parse(sanitized)
       find_key(data, 'datePublished')
+    rescue JSON::ParserError
+      nil
     end
 
     #------------------------------------------------------------------------------------
