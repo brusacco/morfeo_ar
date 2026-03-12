@@ -9,14 +9,14 @@ module WebExtractorServices
     end
 
     def call
-      if @doc.at('meta[property="article:published_time"]')
+      if @doc.at('script[type="application/ld+json"]') && @date.nil?
+        @date = date_from_ld(@doc.at('script[type="application/ld+json"]').text)
+        @parsed = true
+      elsif @doc.at('meta[property="article:published_time"]')
         @date = @doc.at('meta[property="article:published_time"]')[:content]
         @parsed = true
       elsif @doc.at('meta[property="article:modified_time"]') && @date.nil?
         @date = @doc.at('meta[property="article:modified_time"]')[:content]
-        @parsed = true
-      elsif @doc.at('script[type="application/ld+json"]') && @date.nil?
-        @date = date_from_ld(@doc.at('script[type="application/ld+json"]').text)
         @parsed = true
       elsif @doc.at_css('.entry-date') && @date.nil?
         @date = @doc.at_css('.entry-date')[:datetime]
