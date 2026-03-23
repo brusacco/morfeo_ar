@@ -5,12 +5,12 @@ set :environment, 'production'
 every 2.hours do
   rake 'crawler'
   # rake 'update_stats' not longer available external URL Facebook API
-  rake 'update_api'
-  rake 'update_site_stats'
   rake 'ai:set_topic_polarity'
 end
 
 every 4.hours do
+  rake 'update_api'
+  rake 'update_site_stats'
   rake 'proxy_crawler'
 end
 
