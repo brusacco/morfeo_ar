@@ -150,8 +150,9 @@ task update_api: :environment do
 end
 
 def call_api(page_uid, cursor = nil)
+  facebook_api_token = ENV.fetch('FACEBOOK_API_TOKEN')
   api_url = 'https://graph.facebook.com/v22.0/'
-  token = '&access_token=1442100149368278|KS0hVFPE6HgqQ2eMYG_kBpfwjyo'
+  token = "&access_token=#{facebook_api_token}"
   reactions = '%2Creactions.type(LIKE).limit(0).summary(total_count).as(reactions_like)%2Creactions.type(LOVE).limit(0).summary(total_count).as(reactions_love)%2Creactions.type(WOW).limit(0).summary(total_count).as(reactions_wow)%2Creactions.type(HAHA).limit(0).summary(total_count).as(reactions_haha)%2Creactions.type(SAD).limit(0).summary(total_count).as(reactions_sad)%2Creactions.type(ANGRY).limit(0).summary(total_count).as(reactions_angry)%2Creactions.type(THANKFUL).limit(0).summary(total_count).as(reactions_thankful)'
   comments = '%2Ccomments.limit(0).summary(total_count)'
   shares = '%2Cshares'
